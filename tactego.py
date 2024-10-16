@@ -17,16 +17,43 @@ BLUE = 'B'
 FLAG = 'F'
 EMPTY = '.'
 
+"""
+    Precondition:
+    - length > 0
+    - width > 0
+
+    Postcondition:
+    - Returns a 2D list representing an empty game board of size `length x width` 
+      filled with EMPTY ('.') values.
+"""
 def initialize_board(length, width):
     """Initialize an empty game board."""
     return [[EMPTY] * width for _ in range(length)]
 
+"""
+    Precondition:
+    - file_name is a valid path to a file containing piece information.
+
+    Postcondition:
+    - Returns a list of pieces loaded from the file, where each piece is represented 
+      by its type and quantity.
+"""
 def load_pieces(file_name):
     """Load pieces from the specified file."""
     with open(file_name, 'r') as file:
         pieces = [line.strip().split() for line in file]
     return pieces
 
+"""    
+    Precondition:
+    - board is a 2D list representing the game board.
+    - pieces is a list containing pieces for the player.
+    - player is either RED ('R') or BLUE ('B').
+
+    Postcondition:
+    - The specified pieces are placed on the board according to the player's 
+      position (top for RED, bottom for BLUE).
+"""
 def place_pieces(board, pieces, player):
     """Place player pieces on the board."""
     if player == RED:
@@ -45,16 +72,37 @@ def place_pieces(board, pieces, player):
             else:
                 piece_index += 1
 
+"""    
+    Precondition:
+    - pieces is a list of pieces to be shuffled.
+
+    Postcondition:
+    - The order of pieces is randomly shuffled in place.
+"""
 def shuffle_pieces(pieces):
     """Shuffle the order of pieces."""
     random.shuffle(pieces)
 
+"""    
+    Precondition:
+    - board is a 2D list representing the game board.
+
+    Postcondition:
+    - The current state of the board is printed to the console.
+"""
 def draw_board(board):
     """Draw the current state of the board."""
     for row in board:
         print(" ".join(row))
     print()
 
+"""    
+    Precondition:
+    - None.
+
+    Postcondition:
+    - Returns a tuple of starting and ending positions as (row, column) for the move.
+"""
 def get_move():
     """Get a valid move from the player."""
     while True:
@@ -65,6 +113,15 @@ def get_move():
         except ValueError:
             print("Invalid input. Please enter two integers separated by a space.")
 
+"""    
+    Precondition:
+    - board is a 2D list representing the game board.
+    - start and end are tuples representing the starting and ending positions.
+    - player is either RED ('R') or BLUE ('B').
+
+    Postcondition:
+    - Returns True if the move is valid, False otherwise.
+"""
 def is_valid_move(board, start, end, player):
     """Check if the move is valid."""
     # Check if the starting position is the player's piece
@@ -80,11 +137,27 @@ def is_valid_move(board, start, end, player):
     # Check if the ending position is not occupied by the player's own piece
     return board[end[0]][end[1]] != player
 
+"""    
+    Precondition:
+    - board is a 2D list representing the game board.
+    - start and end are tuples representing the starting and ending positions.
+
+    Postcondition:
+    - The piece at the starting position is moved to the ending position, and 
+      the starting position is set to EMPTY ('.').
+"""
 def move_piece(board, start, end):
     """Move the piece on the board."""
     board[end[0]][end[1]] = board[start[0]][start[1]]
     board[start[0]][start[1]] = EMPTY
 
+"""    
+    Precondition:
+    - attacker_strength and defender_strength are integers representing the strengths.
+
+    Postcondition:
+    - Returns 'win' if the attacker wins, 'lose' if the defender wins.
+"""
 def combat_result(attacker_strength, defender_strength):
     """Determine the result of combat."""
     if attacker_strength >= defender_strength:
@@ -92,6 +165,14 @@ def combat_result(attacker_strength, defender_strength):
     else:
         return 'lose'
 
+"""    
+    Precondition:
+    - pieces_file is a valid file containing piece information.
+    - length and width are integers defining the board size.
+
+    Postcondition:
+    - Runs the game loop until a player wins, managing player turns and board state.
+"""
 def tactego(pieces_file, length, width):
     # Set random seed
     random.seed(input('What is seed? '))
